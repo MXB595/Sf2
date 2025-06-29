@@ -1,0 +1,112 @@
+{
+  "name": "software-audio-video-v2",
+  "version": "2.0.0",
+  "description": "Software Audio Video V.2 - Editing Professionale con AI Integrata",
+  "main": "electron-main.js",
+  "homepage": "./",
+  "private": true,
+  "author": {
+    "name": "Software Audio Video V.2",
+    "email": "support@softwareaudiovideo.com",
+    "url": "https://www.softwareaudiovideo.com"
+  },
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dev": "concurrently \"npm run react-dev\" \"wait-on http://localhost:3000 && npm run electron-dev\"",
+    "react-dev": "react-scripts start",
+    "react-build": "react-scripts build",
+    "electron-dev": "cross-env ELECTRON_IS_DEV=true electron .",
+    "electron-pack": "electron-builder",
+    "build": "npm run react-build && npm run electron-pack",
+    "build-win": "npm run react-build && electron-builder --win",
+    "build-portable": "npm run react-build && electron-builder --win portable",
+    "build-setup": "npm run react-build && electron-builder --win nsis",
+    "dist": "npm run build",
+    "pack": "npm run react-build && electron-builder --dir",
+    "clean": "rimraf build dist node_modules/.cache",
+    "rebuild": "npm run clean && npm install",
+    "test": "react-scripts test --watchAll=false",
+    "setup-database": "node scripts/setup-local-database.js",
+    "init-ai": "node scripts/init-ai-models.js"
+  },
+  "dependencies": {
+    "lucide-react": "^0.263.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "electron": "^25.9.8",
+    "electron-builder": "^24.0.0",
+    "rimraf": "^5.0.0",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.softwareaudiovideo.v2",
+    "productName": "Software Audio Video V.2",
+    "directories": {
+      "output": "dist",
+      "buildResources": "assets"
+    },
+    "files": [
+      "build/**/*",
+      "electron-main.js",
+      "preload.js",
+      "package.json",
+      "local-database/**/*",
+      "ai-models/**/*",
+      "node_modules/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "local-database",
+        "to": "local-database"
+      },
+      {
+        "from": "ai-models",
+        "to": "ai-models"
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "assets/icons/icon.ico",
+      "publisherName": "Software Audio Video V.2",
+      "verifyUpdateCodeSignature": false,
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "assets/icons/icon.ico",
+      "uninstallerIcon": "assets/icons/icon.ico",
+      "installerHeaderIcon": "assets/icons/icon.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Software Audio Video V.2",
+      "include": "assets/installer/installer.nsh",
+      "warningsAsErrors": false
+    },
+    "portable": {
+      "artifactName": "SoftwareAudioVideoV2-${version}-portable.exe"
+    },
+    "compression": "maximum",
+    "publish": null
+  },
+  "browserslist": {
+    "production": ["last 1 electron version"],
+    "development": ["last 1 electron version"]
+  }
+}
